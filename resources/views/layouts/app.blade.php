@@ -16,9 +16,9 @@
 
     <header wire:ignore.self class="max-w-5xl mx-auto px-5 pt-6">
         <div class="app-card-strong px-5 py-4 flex items-center justify-between">
-            <div>
-                <p class="text-xs uppercase tracking-[0.2em] text-slate-500 dark:text-slate-400">{{ __('app.header_tagline') }}</p>
-                <h1 class="text-2xl font-semibold text-slate-900 dark:text-white">
+            <div class="min-w-0">
+                <p class="text-[clamp(0.55rem,1.6vw,0.75rem)] uppercase tracking-[0.2em] text-slate-500 dark:text-slate-400 whitespace-nowrap">{{ __('app.header_tagline') }}</p>
+                <h1 class="truncate text-2xl font-semibold text-slate-900 dark:text-white">
                     {{ $title ?? __('app.app_name') }}
                 </h1>
             </div>
@@ -41,7 +41,7 @@
                 <a
                     href="{{ route('medicines') }}"
                     wire:navigate
-                    class="flex flex-1 flex-col items-center justify-center gap-1 rounded-xl px-3 py-2 text-xs font-semibold transition-colors {{ request()->routeIs('medicines') ? 'bg-slate-100 text-slate-900 dark:bg-slate-800 dark:text-white' : 'text-slate-500 hover:text-slate-900 dark:text-slate-300 dark:hover:text-white' }}"
+                    class="flex flex-1 flex-col items-center justify-center gap-1 rounded-xl px-3 py-2 text-center text-xs font-semibold leading-tight transition-colors {{ request()->routeIs('medicines') ? 'bg-slate-100 text-slate-900 dark:bg-slate-800 dark:text-white' : 'text-slate-500 hover:text-slate-900 dark:text-slate-300 dark:hover:text-white' }}"
                 >
                     <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" aria-hidden="true">
                         <path d="M4 11.5L12 5L20 11.5V19.5C20 20.6 19.1 21.5 18 21.5H6C4.9 21.5 4 20.6 4 19.5V11.5Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
@@ -51,7 +51,7 @@
                 <a
                     href="{{ route('add-medicine') }}"
                     wire:navigate
-                    class="flex flex-1 flex-col items-center justify-center gap-1 rounded-xl px-3 py-2 text-xs font-semibold transition-colors {{ request()->routeIs('add-medicine') ? 'bg-slate-100 text-slate-900 dark:bg-slate-800 dark:text-white' : 'text-slate-500 hover:text-slate-900 dark:text-slate-300 dark:hover:text-white' }}"
+                    class="flex flex-1 flex-col items-center justify-center gap-1 rounded-xl px-3 py-2 text-center text-xs font-semibold leading-tight transition-colors {{ request()->routeIs('add-medicine') ? 'bg-slate-100 text-slate-900 dark:bg-slate-800 dark:text-white' : 'text-slate-500 hover:text-slate-900 dark:text-slate-300 dark:hover:text-white' }}"
                 >
                     <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" aria-hidden="true">
                         <path d="M12 5V19M5 12H19" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
@@ -61,7 +61,7 @@
                 <a
                     href="{{ route('settings') }}"
                     wire:navigate
-                    class="flex flex-1 flex-col items-center justify-center gap-1 rounded-xl px-3 py-2 text-xs font-semibold transition-colors {{ request()->routeIs('settings') ? 'bg-slate-100 text-slate-900 dark:bg-slate-800 dark:text-white' : 'text-slate-500 hover:text-slate-900 dark:text-slate-300 dark:hover:text-white' }}"
+                    class="flex flex-1 flex-col items-center justify-center gap-1 rounded-xl px-3 py-2 text-center text-xs font-semibold leading-tight transition-colors {{ request()->routeIs('settings') ? 'bg-slate-100 text-slate-900 dark:bg-slate-800 dark:text-white' : 'text-slate-500 hover:text-slate-900 dark:text-slate-300 dark:hover:text-white' }}"
                 >
                     <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" aria-hidden="true">
                         <path d="M12 8.5C13.933 8.5 15.5 10.067 15.5 12C15.5 13.933 13.933 15.5 12 15.5C10.067 15.5 8.5 13.933 8.5 12C8.5 10.067 10.067 8.5 12 8.5Z" stroke="currentColor" stroke-width="1.5"/>
