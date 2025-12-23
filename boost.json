@@ -1,0 +1,14 @@
+{
+    "agents": [
+        "codex",
+        "cursor"
+    ],
+    "editors": [
+        "codex",
+        "cursor",
+        "vscode"
+    ],
+    "guidelines": [
+        "nativephp/mobile"
+    ]
+}

@@ -1,0 +1,63 @@
+@import 'tailwindcss';
+
+@source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
+@source '../../storage/framework/views/*.php';
+@source '../**/*.blade.php';
+@source '../**/*.js';
+
+@theme {
+    --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
+        'Segoe UI Symbol', 'Noto Color Emoji';
+}
+
+@layer components {
+    .app-card {
+        @apply rounded-2xl border border-slate-200/70 bg-white/80 shadow-sm backdrop-blur dark:border-slate-800/70 dark:bg-slate-900/70;
+    }
+
+    .app-card-strong {
+        @apply rounded-2xl border border-slate-200/70 bg-white shadow-md dark:border-slate-800/70 dark:bg-slate-900;
+    }
+
+    .app-card-interactive {
+        @apply transition duration-200 ease-out hover:-translate-y-0.5 hover:shadow-lg;
+    }
+}
+
+@layer utilities {
+    .animate-fade-up {
+        animation: app-fade-up 0.5s ease-out both;
+    }
+
+    .animate-fade-in {
+        animation: app-fade-in 0.4s ease-out both;
+    }
+
+    .animation-delay-150 {
+        animation-delay: 150ms;
+    }
+
+    .animation-delay-300 {
+        animation-delay: 300ms;
+    }
+}
+
+@keyframes app-fade-up {
+    from {
+        opacity: 0;
+        transform: translateY(12px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes app-fade-in {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
