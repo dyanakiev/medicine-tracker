@@ -216,21 +216,23 @@
                 </div>
             @endif
 
-            <div>
-                <label for="nextDoseAt" class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">
-                    {{ __('app.form.next_dose') }}
-                </label>
-                <input
-                    type="datetime-local"
-                    id="nextDoseAt"
-                    wire:model="nextDoseAt"
-                    class="w-full px-4 py-2.5 border border-slate-200 dark:border-slate-700 rounded-xl bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-cyan-500 focus:border-transparent"
-                >
-                <p class="mt-1 text-xs text-slate-500 dark:text-slate-400">{{ __('app.form.next_dose_help') }}</p>
-                @error('nextDoseAt')
-                    <p class="mt-1 text-sm text-rose-600 dark:text-rose-400">{{ $message }}</p>
-                @enderror
-            </div>
+            @if($scheduleType !== 'as_needed')
+                <div>
+                    <label for="nextDoseAt" class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">
+                        {{ __('app.form.next_dose') }}
+                    </label>
+                    <input
+                        type="datetime-local"
+                        id="nextDoseAt"
+                        wire:model="nextDoseAt"
+                        class="w-full px-4 py-2.5 border border-slate-200 dark:border-slate-700 rounded-xl bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-cyan-500 focus:border-transparent"
+                    >
+                    <p class="mt-1 text-xs text-slate-500 dark:text-slate-400">{{ __('app.form.next_dose_help') }}</p>
+                    @error('nextDoseAt')
+                        <p class="mt-1 text-sm text-rose-600 dark:text-rose-400">{{ $message }}</p>
+                    @enderror
+                </div>
+            @endif
 
             <div>
                 <label for="notes" class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">

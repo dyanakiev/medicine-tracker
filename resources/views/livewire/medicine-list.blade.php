@@ -135,11 +135,6 @@
                     @endphp
                     <div wire:key="medicine-compact-{{ $medicine->id }}" class="app-card app-card-interactive p-4 space-y-4 min-w-0">
                         <div class="flex items-start gap-3 min-w-0">
-                            <div class="h-10 w-10 rounded-2xl bg-teal-100 text-teal-700 dark:bg-teal-900/40 dark:text-teal-200 flex items-center justify-center shrink-0">
-                                <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                                    <path d="M12 4V20M4 12H20" stroke="currentColor" stroke-linecap="round" stroke-width="1.5"/>
-                                </svg>
-                            </div>
                             <div class="flex-1 min-w-0">
                                 <p class="text-base font-semibold text-slate-900 dark:text-slate-100 truncate">{{ $medicine->name }}</p>
                                 <p class="text-xs text-slate-500 dark:text-slate-400">{{ $medicine->dosage }} · {{ $scheduleSummary }}</p>
@@ -248,11 +243,6 @@
                         @foreach($asNeededMedicines as $medicine)
                             <div wire:key="medicine-as-needed-compact-{{ $medicine->id }}" class="app-card app-card-interactive p-4 space-y-4 min-w-0">
                                 <div class="flex items-start gap-3 min-w-0">
-                                    <div class="h-10 w-10 rounded-2xl bg-teal-100 text-teal-700 dark:bg-teal-900/40 dark:text-teal-200 flex items-center justify-center shrink-0">
-                                        <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                                            <path d="M12 4V20M4 12H20" stroke="currentColor" stroke-linecap="round" stroke-width="1.5"/>
-                                        </svg>
-                                    </div>
                                     <div class="flex-1 min-w-0">
                                         <p class="text-base font-semibold text-slate-900 dark:text-slate-100 truncate">{{ $medicine->name }}</p>
                                         <p class="text-xs text-slate-500 dark:text-slate-400">{{ $medicine->dosage }} · {{ __('app.medicines.as_needed') }}</p>
@@ -391,11 +381,6 @@
                                 </span>
                             </div>
                             <div class="flex items-center gap-3 min-w-0">
-                                <div class="h-10 w-10 rounded-2xl bg-teal-100 text-teal-700 dark:bg-teal-900/40 dark:text-teal-200 flex items-center justify-center shrink-0">
-                                    <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                                        <path d="M12 4V20M4 12H20" stroke="currentColor" stroke-linecap="round" stroke-width="1.5"/>
-                                    </svg>
-                                </div>
                                 <div class="min-w-0">
                                     <p class="text-lg font-semibold text-slate-900 dark:text-slate-100">{{ $medicine->name }}</p>
                                     <p class="text-sm text-slate-500 dark:text-slate-400">{{ $medicine->dosage }} · {{ $scheduleSummary }}</p>
@@ -510,11 +495,6 @@
                                         </span>
                                     </div>
                                     <div class="flex items-center gap-3 min-w-0">
-                                        <div class="h-10 w-10 rounded-2xl bg-teal-100 text-teal-700 dark:bg-teal-900/40 dark:text-teal-200 flex items-center justify-center shrink-0">
-                                            <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                                                <path d="M12 4V20M4 12H20" stroke="currentColor" stroke-linecap="round" stroke-width="1.5"/>
-                                            </svg>
-                                        </div>
                                         <div class="min-w-0">
                                             <p class="text-lg font-semibold text-slate-900 dark:text-slate-100">{{ $medicine->name }}</p>
                                             <p class="text-sm text-slate-500 dark:text-slate-400">{{ $medicine->dosage }} · {{ __('app.medicines.as_needed') }}</p>
