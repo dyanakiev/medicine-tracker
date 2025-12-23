@@ -18,14 +18,14 @@ class Settings extends Component
 
     public string $locale = 'en';
 
-    public array $currencies = [];
+    public array $timezones = [];
 
-    public string $currency = 'EUR';
+    public string $timezone = 'UTC';
 
     public function mount(): void
     {
         $this->languages = config('languages.supported', ['en' => 'English']);
-        $this->currencies = config('currencies.supported', ['EUR' => '€']);
+        $this->timezones = \DateTimeZone::listIdentifiers();
 
         try {
             $this->compactView = SecureStorage::get('compact_view') === 'true';
@@ -34,7 +34,7 @@ class Settings extends Component
         }
 
         $this->locale = $this->resolveLocale();
-        $this->currency = $this->resolveCurrency();
+        $this->timezone = $this->resolveTimezone();
     }
 
     public function toggleCompactView(): void
@@ -69,20 +69,23 @@ class Settings extends Component
         $this->redirect(route('settings'), navigate: true);
     }
 
-    public function updatedCurrency(string $value): void
+    public function updatedTimezone(string $value): void
     {
-        if (! array_key_exists($value, $this->currencies)) {
+        if (! in_array($value, $this->timezones, true)) {
             return;
         }
 
-        $this->currency = $value;
+        $this->timezone = $value;
 
         try {
-            SecureStorage::set('currency', $value);
+            SecureStorage::set('timezone', $value);
         } catch (\Exception $e) {
         }
 
-        Dialog::toast(__('app.settings.currency_updated'));
+        config(['app.timezone' => $value]);
+        date_default_timezone_set($value);
+
+        Dialog::toast(__('app.settings.timezone_updated'));
 
         $this->redirect(route('settings'), navigate: true);
     }
@@ -106,21 +109,24 @@ class Settings extends Component
         return $locale;
     }
 
-    protected function resolveCurrency(): string
+    protected function resolveTimezone(): string
     {
         try {
-            $storedCurrency = SecureStorage::get('currency');
+            $storedTimezone = SecureStorage::get('timezone');
         } catch (\Exception $e) {
-            $storedCurrency = null;
+            $storedTimezone = null;
         }
 
-        $currency = $storedCurrency ?: array_key_first($this->currencies);
+        $timezone = $storedTimezone ?: config('app.timezone');
 
-        if (! array_key_exists($currency, $this->currencies)) {
-            $currency = array_key_first($this->currencies);
+        if (! in_array($timezone, $this->timezones, true)) {
+            $timezone = config('app.timezone');
         }
 
-        return $currency;
+        config(['app.timezone' => $timezone]);
+        date_default_timezone_set($timezone);
+
+        return $timezone;
     }
 
     public function render(): View
@@ -128,7 +134,7 @@ class Settings extends Component
         return view('livewire.settings', [
             'title' => __('app.titles.settings'),
             'languages' => $this->languages,
-            'currencies' => $this->currencies,
+            'timezones' => $this->timezones,
         ]);
     }
 }

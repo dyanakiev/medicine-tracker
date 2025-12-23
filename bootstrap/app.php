@@ -13,6 +13,7 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withMiddleware(function (Middleware $middleware): void {
         $middleware->web(append: [
             \App\Middleware\SetLocale::class,
+            \App\Middleware\SetTimezone::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {

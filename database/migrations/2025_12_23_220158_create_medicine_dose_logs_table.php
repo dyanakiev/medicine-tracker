@@ -11,12 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('subscriptions', function (Blueprint $table) {
+        Schema::create('medicine_dose_logs', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->decimal('price', 10, 2);
-            $table->string('url')->nullable();
-            $table->boolean('is_active')->default(true)->after('url');
+            $table->foreignId('medicine_id')->constrained()->cascadeOnDelete();
+            $table->dateTime('taken_at');
             $table->timestamps();
         });
     }
@@ -26,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('subscriptions');
+        Schema::dropIfExists('medicine_dose_logs');
     }
 };

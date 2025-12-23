@@ -1,19 +1,19 @@
-# Subscription Tracker
+# Medicine Tracker
 
 <p align="center">
   <img src="public/icon.png" alt="App Icon" width="50%" style="border-radius: 16px;">
 </p>
 
-A NativePHP Mobile app for tracking recurring subscriptions, built with Laravel, Livewire, and Tailwind. It stores device-specific settings via NativePHP Secure Storage, so the web-only Laravel app experience is incomplete.
+A NativePHP Mobile app for tracking medicines and doses, built with Laravel, Livewire, and Tailwind. It stores device-specific settings via NativePHP Secure Storage.
 
 ## Features
-- Create, edit, and delete subscriptions
-- Mark subscriptions active/inactive and filter the list
-- Sort by monthly price
-- Monthly and yearly totals
+- Create, edit, and delete medicines
+- Flexible schedules (hours, days, weekdays, daily times, specific dates, as-needed)
+- Mark doses as taken and keep a dose history (with removal)
+- Active/paused filters and compact view toggle
+- Notes preview with full notes on expand
 - Multi-language UI
-- Currency selection
-- Compact view toggle
+- Timezone setting for accurate scheduling
 
 ## Stack
 - Laravel 12

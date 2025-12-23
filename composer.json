@@ -1,8 +1,8 @@
 {
     "$schema": "https://getcomposer.org/schema.json",
-    "name": "dyanakiev/subscription-tracker",
+    "name": "dyanakiev/medicine-tracker",
     "type": "project",
-    "description": "A NativePHP Mobile app for tracking recurring subscriptions.",
+    "description": "A NativePHP Mobile app for tracking medicine take.",
     "keywords": [
         "laravel",
         "NativePHP"
@@ -18,7 +18,7 @@
     "require-dev": {
         "fakerphp/faker": "^1.23",
         "laravel-lang/lang": "^15.26",
-        "laravel/boost": "^1.8",
+        "laravel/boost": "*",
         "laravel/pail": "^1.2.2",
         "laravel/pint": "^1.24",
         "laravel/sail": "^1.41",

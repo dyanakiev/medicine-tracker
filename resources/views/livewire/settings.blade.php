@@ -1,7 +1,7 @@
 <div class="space-y-8">
     <header class="space-y-4 animate-fade-up">
-        <div class="inline-flex items-center gap-2 rounded-full border border-violet-200/70 bg-violet-100/70 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-violet-700 dark:border-violet-500/40 dark:bg-violet-500/10 dark:text-violet-200">
-            <span class="h-1.5 w-1.5 rounded-full bg-violet-500"></span>
+        <div class="inline-flex items-center gap-2 rounded-full border border-sky-200/70 bg-sky-100/70 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-sky-700 dark:border-sky-500/40 dark:bg-sky-500/10 dark:text-sky-200">
+            <span class="h-1.5 w-1.5 rounded-full bg-sky-500"></span>
             {{ __('app.badges.preferences') }}
         </div>
         <h1 class="text-3xl font-semibold tracking-tight text-slate-900 dark:text-white">{{ __('app.headers.personalize') }}</h1>
@@ -41,15 +41,15 @@
             </div>
             <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
                 <div>
-                    <p class="text-sm font-medium text-slate-900 dark:text-slate-100">{{ __('app.settings.currency') }}</p>
-                    <p class="text-sm text-slate-500 dark:text-slate-400">{{ __('app.settings.currency_help') }}</p>
+                    <p class="text-sm font-medium text-slate-900 dark:text-slate-100">{{ __('app.settings.timezone') }}</p>
+                    <p class="text-sm text-slate-500 dark:text-slate-400">{{ __('app.settings.timezone_help') }}</p>
                 </div>
                 <select
-                    wire:model.live="currency"
-                    class="w-full sm:w-52 rounded-full border border-slate-200/80 dark:border-slate-700 bg-white dark:bg-slate-900/50 px-4 py-2 text-sm font-semibold text-slate-700 dark:text-slate-100 shadow-sm focus:outline-none focus:ring-2 focus:ring-sky-500"
+                    wire:model.live="timezone"
+                    class="w-full sm:w-72 rounded-full border border-slate-200/80 dark:border-slate-700 bg-white dark:bg-slate-900/50 px-4 py-2 text-sm font-semibold text-slate-700 dark:text-slate-100 shadow-sm focus:outline-none focus:ring-2 focus:ring-sky-500"
                 >
-                    @foreach($currencies as $value => $label)
-                        <option value="{{ $value }}">{{ $value }} {{ $label }}</option>
+                    @foreach($timezones as $timezoneOption)
+                        <option value="{{ $timezoneOption }}">{{ $timezoneOption }}</option>
                     @endforeach
                 </select>
             </div>

@@ -2,12 +2,13 @@
 
 namespace Database\Factories;
 
+use App\Models\Medicine;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Subscription>
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\MedicineDoseLog>
  */
-class SubscriptionFactory extends Factory
+class MedicineDoseLogFactory extends Factory
 {
     /**
      * Define the model's default state.
@@ -17,9 +18,8 @@ class SubscriptionFactory extends Factory
     public function definition(): array
     {
         return [
-            'name' => fake()->company(),
-            'price' => fake()->randomFloat(2, 1, 100),
-            'url' => fake()->optional()->url(),
+            'medicine_id' => Medicine::factory(),
+            'taken_at' => now()->subHours(fake()->numberBetween(1, 24)),
         ];
     }
 }

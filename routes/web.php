@@ -1,16 +1,16 @@
 <?php
 
+use App\Livewire\MedicineForm;
+use App\Livewire\MedicineList;
 use App\Livewire\Settings;
-use App\Livewire\SubscriptionForm;
-use App\Livewire\SubscriptionList;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
-    return redirect()->route('subscriptions');
+    return redirect()->route('medicines');
 });
 
-Route::get('/subscriptions', SubscriptionList::class)->name('subscriptions');
+Route::get('/medicines', MedicineList::class)->name('medicines');
 
-Route::get('/add-subscription', SubscriptionForm::class)->name('add-subscription');
+Route::get('/add-medicine', MedicineForm::class)->name('add-medicine');
 
 Route::get('/settings', Settings::class)->name('settings');
