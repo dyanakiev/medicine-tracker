@@ -135,6 +135,7 @@ return [
         'edit' => 'Duzenle',
         'delete' => 'Sil',
         'remove' => 'Kaldir',
+        'load_more' => 'Daha fazla',
         'cancel' => 'Iptal',
         'edit_medicine' => ':name ilacini duzenle',
         'delete_medicine' => ':name ilacini sil',

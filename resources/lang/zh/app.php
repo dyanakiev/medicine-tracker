@@ -135,6 +135,7 @@ return [
         'edit' => '编辑',
         'delete' => '删除',
         'remove' => '移除',
+        'load_more' => '显示更多',
         'cancel' => '取消',
         'edit_medicine' => '编辑 :name',
         'delete_medicine' => '删除 :name',

@@ -135,6 +135,7 @@ return [
         'edit' => '編集',
         'delete' => '削除',
         'remove' => '削除',
+        'load_more' => 'もっと表示',
         'cancel' => 'キャンセル',
         'edit_medicine' => ':name を編集',
         'delete_medicine' => ':name を削除',

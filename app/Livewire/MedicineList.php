@@ -30,6 +30,11 @@ class MedicineList extends Component
      */
     public array $historyOpen = [];
 
+    /**
+     * @var array<int, int>
+     */
+    public array $historyLimits = [];
+
     public function mount(): void
     {
         try {
@@ -69,6 +74,20 @@ class MedicineList extends Component
         }
 
         $this->historyOpen[] = $id;
+
+        if (! array_key_exists($id, $this->historyLimits)) {
+            $this->historyLimits[$id] = 5;
+        }
+    }
+
+    public function loadMoreHistory(int $id): void
+    {
+        $currentLimit = $this->historyLimits[$id] ?? 5;
+        $this->historyLimits[$id] = $currentLimit + 5;
+
+        if (! in_array($id, $this->historyOpen, true)) {
+            $this->historyOpen[] = $id;
+        }
     }
 
     public function markTaken(int $id): void
@@ -98,6 +117,18 @@ class MedicineList extends Component
         MedicineDoseLog::query()->whereKey($id)->delete();
     }
 
+    public function confirmDeleteDoseLog(int $id): void
+    {
+        $doseLog = MedicineDoseLog::query()->findOrFail($id);
+        $time = $doseLog->taken_at->translatedFormat('M j, Y H:i');
+
+        Dialog::alert(
+            __('app.actions.remove'),
+            __('app.medicines.history_entry', ['time' => $time]),
+            [__('app.actions.cancel'), __('app.actions.delete')]
+        )->id("delete-dose-log-{$id}")->event(ButtonPressed::class);
+    }
+
     public function delete(int $id): void
     {
         $medicine = Medicine::findOrFail($id);
@@ -117,6 +148,11 @@ class MedicineList extends Component
             Medicine::findOrFail($medicineId)->delete();
             Dialog::toast(__('app.toasts.medicine_deleted'));
         }
+
+        if ($index === 1 && $id && str_starts_with($id, 'delete-dose-log-')) {
+            $doseLogId = (int) str_replace('delete-dose-log-', '', $id);
+            MedicineDoseLog::query()->whereKey($doseLogId)->delete();
+        }
     }
 
     public function edit(int $id): void
@@ -129,6 +165,7 @@ class MedicineList extends Component
         $now = now();
 
         $medicines = Medicine::query()
+            ->withCount('doseLogs')
             ->with(['doseLogs' => fn ($query) => $query->latest('taken_at')->limit(5)])
             ->when($this->statusFilter === 'active', fn ($query) => $query->where('is_active', true))
             ->when($this->statusFilter === 'paused', fn ($query) => $query->where('is_active', false))
@@ -141,6 +178,19 @@ class MedicineList extends Component
                 fn ($query) => $query->orderByRaw('next_dose_at is null, next_dose_at asc')
             )
             ->get();
+
+        $medicines->each(function (Medicine $medicine): void {
+            $limit = $this->historyLimits[$medicine->id] ?? 5;
+
+            if ($limit > 5 && in_array($medicine->id, $this->historyOpen, true)) {
+                $logs = $medicine->doseLogs()
+                    ->latest('taken_at')
+                    ->limit($limit)
+                    ->get();
+
+                $medicine->setRelation('doseLogs', $logs);
+            }
+        });
 
         $dueNowCount = $medicines->filter(fn (Medicine $medicine) => $this->isDueNow($medicine, $now))->count();
         $upNextCount = $medicines->filter(fn (Medicine $medicine) => $this->isDueSoon($medicine, $now))->count();

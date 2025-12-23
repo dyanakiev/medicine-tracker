@@ -135,6 +135,7 @@ return [
         'edit' => '편집',
         'delete' => '삭제',
         'remove' => '삭제',
+        'load_more' => '더 보기',
         'cancel' => '취소',
         'edit_medicine' => ':name 편집',
         'delete_medicine' => ':name 삭제',

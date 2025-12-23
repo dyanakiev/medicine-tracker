@@ -135,6 +135,7 @@ return [
         'edit' => 'Modifier',
         'delete' => 'Supprimer',
         'remove' => 'Retirer',
+        'load_more' => 'Afficher plus',
         'cancel' => 'Annuler',
         'edit_medicine' => 'Modifier :name',
         'delete_medicine' => 'Supprimer :name',

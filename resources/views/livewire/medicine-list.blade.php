@@ -211,11 +211,12 @@
                                 <div class="mt-2 space-y-1">
                                     @forelse($medicine->doseLogs as $doseLog)
                                         <div class="flex items-center justify-between gap-2">
-                                            <p>{{ __('app.medicines.history_entry', ['time' => $doseLog->taken_at->diffForHumans()]) }}</p>
+                                            <p>{{ __('app.medicines.history_entry', ['time' => $doseLog->taken_at->translatedFormat('M j, Y H:i')]) }}</p>
                                             <button
                                                 type="button"
-                                                wire:click="deleteDoseLog({{ $doseLog->id }})"
-                                                class="text-[11px] font-semibold text-rose-600 hover:text-rose-700 dark:text-rose-300 dark:hover:text-rose-200"
+                                                wire:click="confirmDeleteDoseLog({{ $doseLog->id }})"
+                                                aria-label="{{ __('app.actions.remove') }}"
+                                                class="inline-flex items-center justify-center rounded-full bg-rose-50 px-2.5 py-1 text-[11px] font-semibold text-rose-600 hover:bg-rose-100 dark:bg-rose-900/30 dark:text-rose-200 dark:hover:bg-rose-900/50"
                                             >
                                                 {{ __('app.actions.remove') }}
                                             </button>
@@ -224,6 +225,15 @@
                                         <p class="text-slate-500 dark:text-slate-400">{{ __('app.medicines.history_empty') }}</p>
                                     @endforelse
                                 </div>
+                                @if($medicine->dose_logs_count > $medicine->doseLogs->count())
+                                    <button
+                                        type="button"
+                                        wire:click="loadMoreHistory({{ $medicine->id }})"
+                                        class="mt-2 text-[11px] font-semibold text-slate-500 hover:text-slate-700 dark:text-slate-300 dark:hover:text-slate-100"
+                                    >
+                                        {{ __('app.actions.load_more') }}
+                                    </button>
+                                @endif
                             </div>
                         @endif
                     </div>
@@ -237,7 +247,6 @@
                 <div class="mt-6 space-y-3">
                     <div class="flex items-center justify-between">
                         <h3 class="text-lg font-semibold text-slate-900 dark:text-white">{{ __('app.medicines.as_needed_section') }}</h3>
-                        <span class="text-xs font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400">{{ __('app.medicines.as_needed') }}</span>
                     </div>
                     <div class="space-y-4">
                         @foreach($asNeededMedicines as $medicine)
@@ -245,7 +254,7 @@
                                 <div class="flex items-start gap-3 min-w-0">
                                     <div class="flex-1 min-w-0">
                                         <p class="text-base font-semibold text-slate-900 dark:text-slate-100 truncate">{{ $medicine->name }}</p>
-                                        <p class="text-xs text-slate-500 dark:text-slate-400">{{ $medicine->dosage }} · {{ __('app.medicines.as_needed') }}</p>
+                                        <p class="text-xs text-slate-500 dark:text-slate-400">{{ $medicine->dosage }}</p>
                                         @if($medicine->notes)
                                             <button
                                                 type="button"
@@ -257,9 +266,6 @@
                                             </button>
                                         @endif
                                     </div>
-                                    <span class="text-xs font-semibold text-slate-500 dark:text-slate-400">
-                                        {{ __('app.medicines.as_needed') }}
-                                    </span>
                                 </div>
                                 <div class="flex items-center justify-between gap-3">
                                     <div class="text-xs text-slate-500 dark:text-slate-400">
@@ -319,11 +325,12 @@
                                         <div class="mt-2 space-y-1">
                                             @forelse($medicine->doseLogs as $doseLog)
                                                 <div class="flex items-center justify-between gap-2">
-                                                    <p>{{ __('app.medicines.history_entry', ['time' => $doseLog->taken_at->diffForHumans()]) }}</p>
+                                                    <p>{{ __('app.medicines.history_entry', ['time' => $doseLog->taken_at->translatedFormat('M j, Y H:i')]) }}</p>
                                                     <button
                                                         type="button"
-                                                        wire:click="deleteDoseLog({{ $doseLog->id }})"
-                                                        class="text-[11px] font-semibold text-rose-600 hover:text-rose-700 dark:text-rose-300 dark:hover:text-rose-200"
+                                                        wire:click="confirmDeleteDoseLog({{ $doseLog->id }})"
+                                                        aria-label="{{ __('app.actions.remove') }}"
+                                                        class="inline-flex items-center justify-center rounded-full bg-rose-50 px-2.5 py-1 text-[11px] font-semibold text-rose-600 hover:bg-rose-100 dark:bg-rose-900/30 dark:text-rose-200 dark:hover:bg-rose-900/50"
                                                     >
                                                         {{ __('app.actions.remove') }}
                                                     </button>
@@ -332,6 +339,15 @@
                                                 <p class="text-slate-500 dark:text-slate-400">{{ __('app.medicines.history_empty') }}</p>
                                             @endforelse
                                         </div>
+                                        @if($medicine->dose_logs_count > $medicine->doseLogs->count())
+                                            <button
+                                                type="button"
+                                                wire:click="loadMoreHistory({{ $medicine->id }})"
+                                                class="mt-2 text-[11px] font-semibold text-slate-500 hover:text-slate-700 dark:text-slate-300 dark:hover:text-slate-100"
+                                            >
+                                                {{ __('app.actions.load_more') }}
+                                            </button>
+                                        @endif
                                     </div>
                                 @endif
                             </div>
@@ -453,11 +469,12 @@
                                 <div class="mt-2 space-y-1">
                                     @forelse($medicine->doseLogs as $doseLog)
                                         <div class="flex items-center justify-between gap-2">
-                                            <p>{{ __('app.medicines.history_entry', ['time' => $doseLog->taken_at->diffForHumans()]) }}</p>
+                                            <p>{{ __('app.medicines.history_entry', ['time' => $doseLog->taken_at->translatedFormat('M j, Y H:i')]) }}</p>
                                             <button
                                                 type="button"
-                                                wire:click="deleteDoseLog({{ $doseLog->id }})"
-                                                class="text-[11px] font-semibold text-rose-600 hover:text-rose-700 dark:text-rose-300 dark:hover:text-rose-200"
+                                                wire:click="confirmDeleteDoseLog({{ $doseLog->id }})"
+                                                aria-label="{{ __('app.actions.remove') }}"
+                                                class="inline-flex items-center justify-center rounded-full bg-rose-50 px-2.5 py-1 text-[11px] font-semibold text-rose-600 hover:bg-rose-100 dark:bg-rose-900/30 dark:text-rose-200 dark:hover:bg-rose-900/50"
                                             >
                                                 {{ __('app.actions.remove') }}
                                             </button>
@@ -466,6 +483,15 @@
                                         <p class="text-slate-500 dark:text-slate-400">{{ __('app.medicines.history_empty') }}</p>
                                     @endforelse
                                 </div>
+                                @if($medicine->dose_logs_count > $medicine->doseLogs->count())
+                                    <button
+                                        type="button"
+                                        wire:click="loadMoreHistory({{ $medicine->id }})"
+                                        class="mt-2 text-[11px] font-semibold text-slate-500 hover:text-slate-700 dark:text-slate-300 dark:hover:text-slate-100"
+                                    >
+                                        {{ __('app.actions.load_more') }}
+                                    </button>
+                                @endif
                             </div>
                         @endif
                     </div>
@@ -479,25 +505,15 @@
                 <div class="mt-6 space-y-3">
                     <div class="flex items-center justify-between">
                         <h3 class="text-lg font-semibold text-slate-900 dark:text-white">{{ __('app.medicines.as_needed_section') }}</h3>
-                        <span class="text-xs font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400">{{ __('app.medicines.as_needed') }}</span>
                     </div>
                     <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
                         @foreach($asNeededMedicines as $medicine)
                             <div wire:key="medicine-as-needed-{{ $medicine->id }}" class="rounded-2xl border border-slate-200/70 dark:border-slate-800/70 bg-white/90 dark:bg-slate-900/70 shadow-sm p-5 flex flex-col justify-between gap-6 app-card-interactive min-w-0">
                                 <div class="space-y-3">
-                                    <div class="flex items-start justify-between gap-3">
-                                        <div>
-                                            <p class="text-xs uppercase tracking-wide text-slate-500 dark:text-slate-400">{{ __('app.medicines.next_dose') }}</p>
-                                            <p class="text-2xl font-semibold text-slate-900 dark:text-white">{{ __('app.medicines.as_needed') }}</p>
-                                        </div>
-                                        <span class="inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-xs font-semibold bg-slate-100 text-slate-700 dark:bg-slate-900/40 dark:text-slate-200">
-                                            {{ __('app.medicines.as_needed') }}
-                                        </span>
-                                    </div>
                                     <div class="flex items-center gap-3 min-w-0">
                                         <div class="min-w-0">
                                             <p class="text-lg font-semibold text-slate-900 dark:text-slate-100">{{ $medicine->name }}</p>
-                                            <p class="text-sm text-slate-500 dark:text-slate-400">{{ $medicine->dosage }} · {{ __('app.medicines.as_needed') }}</p>
+                                            <p class="text-sm text-slate-500 dark:text-slate-400">{{ $medicine->dosage }}</p>
                                             @if($medicine->notes)
                                                 <button
                                                     type="button"
@@ -567,11 +583,12 @@
                                         <div class="mt-2 space-y-1">
                                             @forelse($medicine->doseLogs as $doseLog)
                                                 <div class="flex items-center justify-between gap-2">
-                                                    <p>{{ __('app.medicines.history_entry', ['time' => $doseLog->taken_at->diffForHumans()]) }}</p>
+                                                    <p>{{ __('app.medicines.history_entry', ['time' => $doseLog->taken_at->translatedFormat('M j, Y H:i')]) }}</p>
                                                     <button
                                                         type="button"
-                                                        wire:click="deleteDoseLog({{ $doseLog->id }})"
-                                                        class="text-[11px] font-semibold text-rose-600 hover:text-rose-700 dark:text-rose-300 dark:hover:text-rose-200"
+                                                        wire:click="confirmDeleteDoseLog({{ $doseLog->id }})"
+                                                        aria-label="{{ __('app.actions.remove') }}"
+                                                        class="inline-flex items-center justify-center rounded-full bg-rose-50 px-2.5 py-1 text-[11px] font-semibold text-rose-600 hover:bg-rose-100 dark:bg-rose-900/30 dark:text-rose-200 dark:hover:bg-rose-900/50"
                                                     >
                                                         {{ __('app.actions.remove') }}
                                                     </button>
@@ -580,6 +597,15 @@
                                                 <p class="text-slate-500 dark:text-slate-400">{{ __('app.medicines.history_empty') }}</p>
                                             @endforelse
                                         </div>
+                                        @if($medicine->dose_logs_count > $medicine->doseLogs->count())
+                                            <button
+                                                type="button"
+                                                wire:click="loadMoreHistory({{ $medicine->id }})"
+                                                class="mt-2 text-[11px] font-semibold text-slate-500 hover:text-slate-700 dark:text-slate-300 dark:hover:text-slate-100"
+                                            >
+                                                {{ __('app.actions.load_more') }}
+                                            </button>
+                                        @endif
                                     </div>
                                 @endif
                             </div>

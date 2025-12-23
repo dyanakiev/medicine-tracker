@@ -100,7 +100,7 @@ it('shows dose history for a medicine', function () {
         ->call('setStatusFilter', 'all')
         ->call('toggleHistory', $medicine->id)
         ->assertSee(__('app.medicines.history'))
-        ->assertSee(__('app.medicines.history_entry', ['time' => '2 hours ago']))
+        ->assertSee(__('app.medicines.history_entry', ['time' => 'Jan 10, 2025 07:00']))
         ->call('deleteDoseLog', $doseLog->id);
 
     expect($medicine->doseLogs()->count())->toBe(0);

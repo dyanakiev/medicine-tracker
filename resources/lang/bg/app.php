@@ -135,6 +135,7 @@ return [
         'edit' => 'Редакция',
         'delete' => 'Изтрий',
         'remove' => 'Премахни',
+        'load_more' => 'Покажи още',
         'cancel' => 'Отказ',
         'edit_medicine' => 'Редактирай :name',
         'delete_medicine' => 'Изтрий :name',
