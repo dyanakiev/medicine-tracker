@@ -1,10 +1,10 @@
 <?php
 
-use App\Livewire\MedicineList;
 use App\Models\Medicine;
+use App\Models\MedicineDoseLog;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Carbon;
-use Livewire\Livewire;
+use Inertia\Testing\AssertableInertia as Assert;
 use Native\Mobile\Facades\Dialog;
 
 uses(RefreshDatabase::class);
@@ -28,20 +28,37 @@ it('shows only active medicines by default', function () {
         'is_active' => false,
     ]);
 
-    Livewire::test(MedicineList::class)
-        ->assertSee($due->name)
-        ->assertSee($upcoming->name)
-        ->assertDontSee($paused->name);
+    $this->get('/medicines')
+        ->assertSuccessful()
+        ->assertInertia(fn (Assert $page) => $page
+            ->component('Medicines/Index')
+            ->where('statusFilter', 'active')
+            ->where('scheduledMedicines', function ($medicines) use ($due, $upcoming, $paused) {
+                $names = collect($medicines)->pluck('name')->all();
+
+                return in_array($due->name, $names, true)
+                    && in_array($upcoming->name, $names, true)
+                    && ! in_array($paused->name, $names, true);
+            })
+        );
 });
 
 it('can filter paused medicines', function () {
     $active = Medicine::factory()->create(['name' => 'Metformin', 'is_active' => true]);
     $paused = Medicine::factory()->create(['name' => 'Loratadine', 'is_active' => false]);
 
-    Livewire::test(MedicineList::class)
-        ->call('setStatusFilter', 'paused')
-        ->assertSee($paused->name)
-        ->assertDontSee($active->name);
+    $this->get('/medicines?status=paused')
+        ->assertSuccessful()
+        ->assertInertia(fn (Assert $page) => $page
+            ->component('Medicines/Index')
+            ->where('statusFilter', 'paused')
+            ->where('scheduledMedicines', function ($medicines) use ($active, $paused) {
+                $names = collect($medicines)->pluck('name')->all();
+
+                return in_array($paused->name, $names, true)
+                    && ! in_array($active->name, $names, true);
+            })
+        );
 });
 
 it('sorts medicines by next dose time', function () {
@@ -50,11 +67,29 @@ it('sorts medicines by next dose time', function () {
     $soon = Medicine::factory()->create(['name' => 'Atorvastatin', 'next_dose_at' => now()->addHour()]);
     $later = Medicine::factory()->create(['name' => 'Amlodipine', 'next_dose_at' => now()->addHours(6)]);
 
-    Livewire::test(MedicineList::class)
-        ->call('setStatusFilter', 'all')
-        ->assertSeeInOrder([$soon->name, $later->name])
-        ->call('sortBy', 'latest')
-        ->assertSeeInOrder([$later->name, $soon->name]);
+    $this->get('/medicines?status=all&sort=soonest')
+        ->assertSuccessful()
+        ->assertInertia(fn (Assert $page) => $page
+            ->component('Medicines/Index')
+            ->where('sortOrder', 'soonest')
+            ->where('scheduledMedicines', function ($medicines) use ($soon, $later) {
+                $names = collect($medicines)->pluck('name')->all();
+
+                return $names === [$soon->name, $later->name];
+            })
+        );
+
+    $this->get('/medicines?status=all&sort=latest')
+        ->assertSuccessful()
+        ->assertInertia(fn (Assert $page) => $page
+            ->component('Medicines/Index')
+            ->where('sortOrder', 'latest')
+            ->where('scheduledMedicines', function ($medicines) use ($soon, $later) {
+                $names = collect($medicines)->pluck('name')->all();
+
+                return $names === [$later->name, $soon->name];
+            })
+        );
 });
 
 it('marks a medicine as taken and updates schedule', function () {
@@ -69,8 +104,8 @@ it('marks a medicine as taken and updates schedule', function () {
 
     Dialog::shouldReceive('toast')->once()->andReturnNull();
 
-    Livewire::test(MedicineList::class)
-        ->call('markTaken', $medicine->id);
+    $this->post("/medicines/{$medicine->id}/taken")
+        ->assertRedirect('/medicines');
 
     $medicine->refresh();
 
@@ -84,26 +119,39 @@ it('deletes a medicine when confirmed', function () {
 
     Dialog::shouldReceive('toast')->once()->andReturnNull();
 
-    Livewire::test(MedicineList::class)
-        ->call('handleDeleteConfirmation', 1, 'Delete', "delete-medicine-{$medicine->id}");
+    $this->post("/medicines/{$medicine->id}/delete")
+        ->assertRedirect('/medicines');
 
     expect(Medicine::query()->whereKey($medicine->id)->exists())->toBeFalse();
 });
 
-it('shows dose history for a medicine', function () {
+it('shows dose history for a medicine and can delete dose logs', function () {
     Carbon::setTestNow('2025-01-10 09:00:00');
 
     $medicine = Medicine::factory()->create(['name' => 'Losartan', 'is_active' => true]);
     $doseLog = $medicine->doseLogs()->create(['taken_at' => now()->subHours(2)]);
 
-    Livewire::test(MedicineList::class)
-        ->call('setStatusFilter', 'all')
-        ->call('toggleHistory', $medicine->id)
-        ->assertSee(__('app.medicines.history'))
-        ->assertSee(__('app.medicines.history_entry', ['time' => 'Jan 10, 2025 07:00']))
-        ->call('deleteDoseLog', $doseLog->id);
+    $this->get("/medicines?status=all&open[]={$medicine->id}&history[{$medicine->id}]=5")
+        ->assertSuccessful()
+        ->assertInertia(fn (Assert $page) => $page
+            ->component('Medicines/Index')
+            ->where('scheduledMedicines', function ($medicines) use ($medicine, $doseLog) {
+                $payload = collect($medicines)->firstWhere('id', $medicine->id);
 
-    expect($medicine->doseLogs()->count())->toBe(0);
+                if (! is_array($payload) || ! isset($payload['doseLogs'])) {
+                    return false;
+                }
+
+                $logIds = collect($payload['doseLogs'])->pluck('id')->all();
+
+                return in_array($doseLog->id, $logIds, true);
+            })
+        );
+
+    $this->post("/dose-logs/{$doseLog->id}/delete")
+        ->assertRedirect('/medicines');
+
+    expect(MedicineDoseLog::query()->whereKey($doseLog->id)->exists())->toBeFalse();
 });
 
 it('counts taken today from dose logs', function () {
@@ -116,25 +164,33 @@ it('counts taken today from dose logs', function () {
     $active->doseLogs()->create(['taken_at' => now()->subDays(1)]);
     $paused->doseLogs()->create(['taken_at' => now()->subHour()]);
 
-    Livewire::test(MedicineList::class)
-        ->assertViewHas('takenTodayCount', 1);
+    $this->get('/medicines')
+        ->assertSuccessful()
+        ->assertInertia(fn (Assert $page) => $page
+            ->component('Medicines/Index')
+            ->where('takenTodayCount', 1)
+        );
 });
 
-it('shows a notes preview and full notes when expanded', function () {
+it('shows notes when provided', function () {
     $medicine = Medicine::factory()->create([
         'notes' => 'Take with food and a full glass of water.',
         'is_active' => true,
     ]);
 
-    Livewire::test(MedicineList::class)
-        ->call('setStatusFilter', 'all')
-        ->assertSee(__('app.medicines.notes_label'))
-        ->assertSee($medicine->notes)
-        ->call('toggleHistory', $medicine->id)
-        ->assertSee($medicine->notes);
+    $this->get('/medicines?status=all')
+        ->assertSuccessful()
+        ->assertInertia(fn (Assert $page) => $page
+            ->component('Medicines/Index')
+            ->where('scheduledMedicines', function ($medicines) use ($medicine) {
+                $payload = collect($medicines)->firstWhere('id', $medicine->id);
+
+                return is_array($payload) && $payload['notes'] === $medicine->notes;
+            })
+        );
 });
 
-it('shows as-needed medicines in a separate section', function () {
+it('shows as-needed medicines in the list', function () {
     $scheduled = Medicine::factory()->create([
         'name' => 'Aspirin',
         'schedule_type' => 'hours',
@@ -149,9 +205,19 @@ it('shows as-needed medicines in a separate section', function () {
         'is_active' => true,
     ]);
 
-    Livewire::test(MedicineList::class)
-        ->call('setStatusFilter', 'all')
-        ->assertSee($scheduled->name)
-        ->assertSee($asNeeded->name)
-        ->assertSee(__('app.medicines.as_needed_section'));
+    $this->get('/medicines?status=all')
+        ->assertSuccessful()
+        ->assertInertia(fn (Assert $page) => $page
+            ->component('Medicines/Index')
+            ->where('scheduledMedicines', function ($medicines) use ($scheduled) {
+                $names = collect($medicines)->pluck('name')->all();
+
+                return in_array($scheduled->name, $names, true);
+            })
+            ->where('asNeededMedicines', function ($medicines) use ($asNeeded) {
+                $names = collect($medicines)->pluck('name')->all();
+
+                return in_array($asNeeded->name, $names, true);
+            })
+        );
 });

@@ -130,7 +130,7 @@ return [
         'storage/framework/testing',
         'storage/logs/laravel.log',
         'database/database.sqlite',
-        'database/testing.sqlite',
+        'database/testing.sqlite'
     ],
 
     'android' => [

@@ -1,10 +1,8 @@
 <?php
 
-use App\Livewire\MedicineForm;
 use App\Models\Medicine;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Carbon;
-use Livewire\Livewire;
 use Native\Mobile\Facades\Dialog;
 
 uses(RefreshDatabase::class);
@@ -14,14 +12,15 @@ it('creates a medicine', function () {
 
     Dialog::shouldReceive('toast')->once()->andReturnNull();
 
-    Livewire::test(MedicineForm::class)
-        ->set('name', 'Amoxicillin')
-        ->set('dosage', '1 capsule')
-        ->set('frequencyHours', '8')
-        ->set('notes', 'Take with food')
-        ->call('save')
-        ->assertRedirect(route('medicines'))
-        ->assertDispatched('medicine-saved');
+    $response = $this->post('/medicines', [
+        'name' => 'Amoxicillin',
+        'dosage' => '1 capsule',
+        'schedule_type' => 'hours',
+        'frequency_hours' => 8,
+        'notes' => 'Take with food',
+    ]);
+
+    $response->assertRedirect('/medicines');
 
     $medicine = Medicine::query()->latest('id')->first();
 
@@ -47,15 +46,16 @@ it('updates a medicine', function () {
 
     Dialog::shouldReceive('toast')->once()->andReturnNull();
 
-    Livewire::test(MedicineForm::class, ['id' => $medicine->id])
-        ->set('name', 'Metformin XR')
-        ->set('dosage', '2 tablets')
-        ->set('frequencyHours', '24')
-        ->set('notes', 'Evening only')
-        ->set('isActive', true)
-        ->call('save')
-        ->assertRedirect(route('medicines'))
-        ->assertDispatched('medicine-saved');
+    $response = $this->put("/medicines/{$medicine->id}", [
+        'name' => 'Metformin XR',
+        'dosage' => '2 tablets',
+        'schedule_type' => 'hours',
+        'frequency_hours' => 24,
+        'notes' => 'Evening only',
+        'is_active' => true,
+    ]);
+
+    $response->assertRedirect('/medicines');
 
     $medicine->refresh();
 
@@ -70,16 +70,11 @@ it('updates a medicine', function () {
 it('validates required fields', function () {
     Dialog::shouldReceive('toast')->never();
 
-    Livewire::test(MedicineForm::class)
-        ->set('name', '')
-        ->set('dosage', '')
-        ->set('frequencyHours', '')
-        ->call('save')
-        ->assertHasErrors([
-            'name' => 'required',
-            'dosage' => 'required',
-            'frequencyHours' => 'required',
-        ]);
+    $this->post('/medicines', [
+        'name' => '',
+        'dosage' => '',
+        'schedule_type' => '',
+    ])->assertSessionHasErrors(['name', 'dosage', 'schedule_type']);
 });
 
 it('creates a days-based schedule', function () {
@@ -87,15 +82,15 @@ it('creates a days-based schedule', function () {
 
     Dialog::shouldReceive('toast')->once()->andReturnNull();
 
-    Livewire::test(MedicineForm::class)
-        ->set('name', 'Vitamin D')
-        ->set('dosage', '1 tablet')
-        ->set('scheduleType', 'days')
-        ->set('frequencyDays', '2')
-        ->set('timeOfDay', '08:30')
-        ->call('save')
-        ->assertRedirect(route('medicines'))
-        ->assertDispatched('medicine-saved');
+    $response = $this->post('/medicines', [
+        'name' => 'Vitamin D',
+        'dosage' => '1 tablet',
+        'schedule_type' => 'days',
+        'frequency_days' => 2,
+        'time_of_day' => '08:30',
+    ]);
+
+    $response->assertRedirect('/medicines');
 
     $medicine = Medicine::query()->latest('id')->first();
 
@@ -108,25 +103,24 @@ it('creates a days-based schedule', function () {
 it('requires valid times for time-based schedules', function () {
     Dialog::shouldReceive('toast')->never();
 
-    Livewire::test(MedicineForm::class)
-        ->set('name', 'Melatonin')
-        ->set('dosage', '1 tablet')
-        ->set('scheduleType', 'times')
-        ->set('timesInput', 'bad-time')
-        ->call('save')
-        ->assertHasErrors(['timesInput']);
+    $this->post('/medicines', [
+        'name' => 'Melatonin',
+        'dosage' => '1 tablet',
+        'schedule_type' => 'times',
+        'times_input' => 'bad-time',
+    ])->assertSessionHasErrors(['times_input']);
 });
 
 it('creates an as-needed medicine without a next dose', function () {
     Dialog::shouldReceive('toast')->once()->andReturnNull();
 
-    Livewire::test(MedicineForm::class)
-        ->set('name', 'Ibuprofen')
-        ->set('dosage', '1 tablet')
-        ->set('scheduleType', 'as_needed')
-        ->call('save')
-        ->assertRedirect(route('medicines'))
-        ->assertDispatched('medicine-saved');
+    $response = $this->post('/medicines', [
+        'name' => 'Ibuprofen',
+        'dosage' => '1 tablet',
+        'schedule_type' => 'as_needed',
+    ]);
+
+    $response->assertRedirect('/medicines');
 
     $medicine = Medicine::query()->latest('id')->first();
 

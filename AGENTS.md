@@ -9,14 +9,16 @@ The Laravel Boost guidelines are specifically curated by Laravel maintainers for
 This application is a Laravel application and its main Laravel ecosystems package & versions are below. You are an expert with them all. Ensure you abide by these specific packages & versions.
 
 - php - 8.4.16
+- inertiajs/inertia-laravel (INERTIA) - v2
 - laravel/framework (LARAVEL) - v12
 - laravel/prompts (PROMPTS) - v0
-- livewire/livewire (LIVEWIRE) - v3
 - laravel/mcp (MCP) - v0
 - laravel/pint (PINT) - v1
 - laravel/sail (SAIL) - v1
 - pestphp/pest (PEST) - v4
 - phpunit/phpunit (PHPUNIT) - v12
+- @inertiajs/react (INERTIA) - v1
+- react (REACT) - v18
 - tailwindcss (TAILWINDCSS) - v4
 
 ## Conventions
@@ -118,6 +120,44 @@ protected function isAccessible(User $user, ?string $path = null): bool
 - Run the minimum number of tests needed to ensure code quality and speed. Use `php artisan test` with a specific filename or filter.
 
 
+=== inertia-laravel/core rules ===
+
+## Inertia Core
+
+- Inertia.js components should be placed in the `resources/js/Pages` directory unless specified differently in the JS bundler (vite.config.js).
+- Use `Inertia::render()` for server-side routing instead of traditional Blade views.
+- Use `search-docs` for accurate guidance on all things Inertia.
+
+<code-snippet lang="php" name="Inertia::render Example">
+// routes/web.php example
+Route::get('/users', function () {
+    return Inertia::render('Users/Index', [
+        'users' => User::all()
+    ]);
+});
+</code-snippet>
+
+
+=== inertia-laravel/v2 rules ===
+
+## Inertia v2
+
+- Make use of all Inertia features from v1 & v2. Check the documentation before making any changes to ensure we are taking the correct approach.
+
+### Inertia v2 New Features
+- Polling
+- Prefetching
+- Deferred props
+- Infinite scrolling using merging props and `WhenVisible`
+- Lazy loading data on scroll
+
+### Deferred Props & Empty States
+- When using deferred props on the frontend, you should add a nice empty state with pulsing / animated skeleton.
+
+### Inertia Form General Guidance
+- Build forms using the `useForm` helper. Use the code examples and `search-docs` tool with a query of `useForm helper` for guidance.
+
+
 === laravel/core rules ===
 
 ## Do Things the Laravel Way
@@ -184,89 +224,6 @@ protected function isAccessible(User $user, ?string $path = null): bool
 
 ### Models
 - Casts can and likely should be set in a `casts()` method on a model rather than the `$casts` property. Follow existing conventions from other models.
-
-
-=== livewire/core rules ===
-
-## Livewire Core
-- Use the `search-docs` tool to find exact version specific documentation for how to write Livewire & Livewire tests.
-- Use the `php artisan make:livewire [Posts\CreatePost]` artisan command to create new components
-- State should live on the server, with the UI reflecting it.
-- All Livewire requests hit the Laravel backend, they're like regular HTTP requests. Always validate form data, and run authorization checks in Livewire actions.
-
-## Livewire Best Practices
-- Livewire components require a single root element.
-- Use `wire:loading` and `wire:dirty` for delightful loading states.
-- Add `wire:key` in loops:
-
-    ```blade
-    @foreach ($items as $item)
-        <div wire:key="item-{{ $item->id }}">
-            {{ $item->name }}
-        </div>
-    @endforeach
-    ```
-
-- Prefer lifecycle hooks like `mount()`, `updatedFoo()` for initialization and reactive side effects:
-
-<code-snippet name="Lifecycle hook examples" lang="php">
-    public function mount(User $user) { $this->user = $user; }
-    public function updatedSearch() { $this->resetPage(); }
-</code-snippet>
-
-
-## Testing Livewire
-
-<code-snippet name="Example Livewire component test" lang="php">
-    Livewire::test(Counter::class)
-        ->assertSet('count', 0)
-        ->call('increment')
-        ->assertSet('count', 1)
-        ->assertSee(1)
-        ->assertStatus(200);
-</code-snippet>
-
-
-    <code-snippet name="Testing a Livewire component exists within a page" lang="php">
-        $this->get('/posts/create')
-        ->assertSeeLivewire(CreatePost::class);
-    </code-snippet>
-
-
-=== livewire/v3 rules ===
-
-## Livewire 3
-
-### Key Changes From Livewire 2
-- These things changed in Livewire 2, but may not have been updated in this application. Verify this application's setup to ensure you conform with application conventions.
-    - Use `wire:model.live` for real-time updates, `wire:model` is now deferred by default.
-    - Components now use the `App\Livewire` namespace (not `App\Http\Livewire`).
-    - Use `$this->dispatch()` to dispatch events (not `emit` or `dispatchBrowserEvent`).
-    - Use the `components.layouts.app` view as the typical layout path (not `layouts.app`).
-
-### New Directives
-- `wire:show`, `wire:transition`, `wire:cloak`, `wire:offline`, `wire:target` are available for use. Use the documentation to find usage examples.
-
-### Alpine
-- Alpine is now included with Livewire, don't manually include Alpine.js.
-- Plugins included with Alpine: persist, intersect, collapse, and focus.
-
-### Lifecycle Hooks
-- You can listen for `livewire:init` to hook into Livewire initialization, and `fail.status === 419` for the page expiring:
-
-<code-snippet name="livewire:load example" lang="js">
-document.addEventListener('livewire:init', function () {
-    Livewire.hook('request', ({ fail }) => {
-        if (fail && fail.status === 419) {
-            alert('Your session expired');
-        }
-    });
-
-    Livewire.hook('message.failed', (message, component) => {
-        console.error(message);
-    });
-});
-</code-snippet>
 
 
 === pint/core rules ===
@@ -372,6 +329,69 @@ it('may reset the password', function () {
 $pages = visit(['/', '/about', '/contact']);
 
 $pages->assertNoJavascriptErrors()->assertNoConsoleLogs();
+</code-snippet>
+
+
+=== inertia-react/core rules ===
+
+## Inertia + React
+
+- Use `router.visit()` or `<Link>` for navigation instead of traditional links.
+
+<code-snippet name="Inertia Client Navigation" lang="react">
+
+import { Link } from '@inertiajs/react'
+<Link href="/">Home</Link>
+
+</code-snippet>
+
+
+=== inertia-react/v1/forms rules ===
+
+## Inertia + React Forms
+
+- For form handling in Inertia pages, use `router.post` and related methods. Do not use regular forms.
+
+
+<code-snippet name="Inertia React Form Example" lang="react">
+import { useState } from 'react'
+import { router } from '@inertiajs/react'
+
+export default function Edit() {
+    const [values, setValues] = useState({
+        first_name: "",
+        last_name: "",
+        email: "",
+    })
+
+    function handleChange(e) {
+        const key = e.target.id;
+        const value = e.target.value
+
+        setValues(values => ({
+            ...values,
+            [key]: value,
+        }))
+    }
+
+    function handleSubmit(e) {
+        e.preventDefault()
+
+        router.post('/users', values)
+    }
+
+    return (
+    <form onSubmit={handleSubmit}>
+        <label htmlFor="first_name">First name:</label>
+        <input id="first_name" value={values.first_name} onChange={handleChange} />
+        <label htmlFor="last_name">Last name:</label>
+        <input id="last_name" value={values.last_name} onChange={handleChange} />
+        <label htmlFor="email">Email:</label>
+        <input id="email" value={values.email} onChange={handleChange} />
+        <button type="submit">Submit</button>
+    </form>
+    )
+}
 </code-snippet>
 
 
