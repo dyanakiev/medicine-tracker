@@ -5,6 +5,7 @@ const AppLayout = ({ children }) => {
     const { props, url } = usePage();
     const translations = props.translations ?? {};
     const pageTitle = props.title ?? props.appName;
+    const headerTitle = props.appName ?? pageTitle;
     const t = (key, replacements) => translate(translations, key, replacements);
 
     const isHome = url === '/medicines' || url.startsWith('/medicines?');
@@ -22,16 +23,16 @@ const AppLayout = ({ children }) => {
             </div>
 
             <header className="max-w-5xl mx-auto px-5 pt-6">
-                <div className="app-card-strong px-5 py-4 flex items-center justify-between">
-                    <div className="min-w-0">
-                        <p className="text-[clamp(0.55rem,1.6vw,0.75rem)] uppercase tracking-[0.2em] text-slate-500 dark:text-slate-400 whitespace-nowrap">
+                <div className="app-card-strong px-5 py-4 flex items-start gap-4">
+                    <div className="min-w-0 flex-1">
+                        <p className="text-[clamp(0.55rem,1.6vw,0.75rem)] uppercase tracking-[0.2em] text-slate-500 dark:text-slate-400 leading-tight">
                             {t('header_tagline')}
                         </p>
-                        <h1 className="truncate text-2xl font-semibold text-slate-900 dark:text-white">
-                            {pageTitle}
+                        <h1 className="text-2xl font-semibold text-slate-900 dark:text-white">
+                            {headerTitle}
                         </h1>
                     </div>
-                    <div className="h-10 w-10 rounded-full bg-slate-900 text-white dark:bg-white dark:text-slate-900 flex items-center justify-center">
+                    <div className="ml-auto h-10 w-10 shrink-0 rounded-full bg-slate-900 text-white dark:bg-white dark:text-slate-900 flex items-center justify-center">
                         <svg className="w-6 h-6" viewBox="0 0 24 24" fill="none" aria-hidden="true">
                             <path d="M12 6V18M6 12H18" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round"/>
                             <path d="M4.5 12C4.5 7.86 7.86 4.5 12 4.5C16.14 4.5 19.5 7.86 19.5 12C19.5 16.14 16.14 19.5 12 19.5C7.86 19.5 4.5 16.14 4.5 12Z" stroke="currentColor" strokeWidth="1.2" opacity="0.6"/>

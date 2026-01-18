@@ -130,7 +130,7 @@ return [
         'storage/framework/testing',
         'storage/logs/laravel.log',
         'database/database.sqlite',
-        'database/testing.sqlite'
+        'database/testing.sqlite',
     ],
 
     'android' => [
@@ -267,7 +267,7 @@ return [
         'storage_read' => false,
         'storage_write' => false,
         'scanner' => false,
-        'network_state' => true,
+        'network_state' => false,
     ],
 
     /*

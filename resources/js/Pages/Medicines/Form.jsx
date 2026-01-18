@@ -226,7 +226,7 @@ const MedicineForm = () => {
                                         id="timeOfDayDays"
                                         value={form.data.time_of_day}
                                         onChange={(event) => form.setData('time_of_day', event.target.value)}
-                                        className="w-full px-4 py-2.5 border border-slate-200 dark:border-slate-700 rounded-xl bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-cyan-500 focus:border-transparent"
+                                        className="w-full min-w-0 max-w-full px-4 py-2.5 border border-slate-200 dark:border-slate-700 rounded-xl bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-cyan-500 focus:border-transparent"
                                     />
                                     {form.errors.time_of_day && (
                                         <p className="mt-1 text-sm text-rose-600 dark:text-rose-400">{form.errors.time_of_day}</p>
@@ -271,7 +271,7 @@ const MedicineForm = () => {
                                         id="timeOfDayWeekdays"
                                         value={form.data.time_of_day}
                                         onChange={(event) => form.setData('time_of_day', event.target.value)}
-                                        className="w-full px-4 py-2.5 border border-slate-200 dark:border-slate-700 rounded-xl bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-cyan-500 focus:border-transparent"
+                                        className="w-full min-w-0 max-w-full px-4 py-2.5 border border-slate-200 dark:border-slate-700 rounded-xl bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-cyan-500 focus:border-transparent"
                                     />
                                     {form.errors.time_of_day && (
                                         <p className="mt-1 text-sm text-rose-600 dark:text-rose-400">{form.errors.time_of_day}</p>
@@ -328,7 +328,7 @@ const MedicineForm = () => {
                                         id="timeOfDayDates"
                                         value={form.data.time_of_day}
                                         onChange={(event) => form.setData('time_of_day', event.target.value)}
-                                        className="w-full px-4 py-2.5 border border-slate-200 dark:border-slate-700 rounded-xl bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-cyan-500 focus:border-transparent"
+                                        className="w-full min-w-0 max-w-full px-4 py-2.5 border border-slate-200 dark:border-slate-700 rounded-xl bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-cyan-500 focus:border-transparent"
                                     />
                                     {form.errors.time_of_day && (
                                         <p className="mt-1 text-sm text-rose-600 dark:text-rose-400">{form.errors.time_of_day}</p>
@@ -347,7 +347,7 @@ const MedicineForm = () => {
                                     id="nextDoseAt"
                                     value={form.data.next_dose_at}
                                     onChange={(event) => form.setData('next_dose_at', event.target.value)}
-                                    className="w-full px-4 py-2.5 border border-slate-200 dark:border-slate-700 rounded-xl bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-cyan-500 focus:border-transparent"
+                                    className="w-full min-w-0 max-w-full px-4 py-2.5 border border-slate-200 dark:border-slate-700 rounded-xl bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-cyan-500 focus:border-transparent"
                                 />
                                 <p className="mt-1 text-xs text-slate-500 dark:text-slate-400">{t('form.next_dose_help')}</p>
                                 {form.errors.next_dose_at && (

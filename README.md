@@ -4,7 +4,7 @@
   <img src="public/icon.png" alt="App Icon" width="50%" style="border-radius: 16px;">
 </p>
 
-A NativePHP Mobile app for tracking medicines and doses, built with Laravel, Livewire, and Tailwind. It stores device-specific settings via NativePHP Secure Storage.
+A NativePHP Mobile app for tracking medicines and doses, built with Laravel, Inertia, React, and Tailwind. It stores device-specific settings via NativePHP Secure Storage.
 
 ## Features
 - Create, edit, and delete medicines
@@ -17,12 +17,13 @@ A NativePHP Mobile app for tracking medicines and doses, built with Laravel, Liv
 
 ## Stack
 - Laravel 12
-- Livewire 3
+- Inertia.js v2 (Laravel adapter)
+- React 18
 - Tailwind CSS 4
 - NativePHP Mobile
 
 ## Requirements
-- PHP 8.4
+- PHP 8.2+
 - Composer
 - Node.js + npm
 
@@ -37,11 +38,13 @@ sudo xcode-select -s /Applications/Xcode.app/Contents/Developer
 
 Run Android emulator:
 ```bash
+npm run build -- --mode=android
 php artisan native:run android --watch
 ```
 
 Run iOS emulator:
 ```bash
+npm run build -- --mode=ios
 php artisan native:run ios --watch
 ```
 

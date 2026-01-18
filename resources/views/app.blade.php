@@ -3,6 +3,20 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+    <meta name="color-scheme" content="light dark" />
+    <style>
+        html,
+        body {
+            background-color: #ecfeff;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            html,
+            body {
+                background-color: #020617;
+            }
+        }
+    </style>
     @viteReactRefresh
     @vite('resources/js/app.jsx')
     @inertiaHead
