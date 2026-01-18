@@ -267,7 +267,7 @@ return [
         'storage_read' => false,
         'storage_write' => false,
         'scanner' => false,
-        'network_state' => true,
+        'network_state' => false,
     ],
 
     /*

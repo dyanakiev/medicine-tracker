@@ -11,9 +11,8 @@
     "require": {
         "php": "^8.2",
         "laravel/framework": "^12.0",
-        "laravel/tinker": "^2.10.1",
-        "livewire/livewire": "^3.7",
-        "nativephp/mobile": "^2.3"
+        "nativephp/mobile": "^2.3",
+        "inertiajs/inertia-laravel": "^2.0"
     },
     "require-dev": {
         "fakerphp/faker": "^1.23",
@@ -22,6 +21,7 @@
         "laravel/pail": "^1.2.2",
         "laravel/pint": "^1.24",
         "laravel/sail": "^1.41",
+        "laravel/tinker": "*",
         "mockery/mockery": "^1.6",
         "nunomaduro/collision": "^8.6",
         "pestphp/pest": "^4.2",
@@ -40,10 +40,10 @@
         }
     },
     "repositories": [
-    {
-        "type": "composer",
-        "url": "https://nativephp.composer.sh"
-    }
+        {
+            "type": "composer",
+            "url": "https://nativephp.composer.sh"
+        }
     ],
     "scripts": {
         "setup": [
